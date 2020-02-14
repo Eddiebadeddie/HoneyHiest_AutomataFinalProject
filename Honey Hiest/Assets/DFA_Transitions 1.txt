@@ -1,0 +1,393 @@
+DFA transitions and data
+
+(STATE, input) => (NEW_STATE)
+(STATE, input, bool) => (NEW_STATE)
+
+Description can have a few options based on boolean
+	i.e Description = TEXT_1 | TEXT2 reads as Description can be TEXT_1 or TEXT_2
+
+If the Description text has an appended P or F, then the player must roll for that. P is for passing the roll, F is for failing.
+If the Description is dependent on a boolean, the boolean value will be placed above the text.
+	i.e if Flag = true
+		TEXT_TRUE
+			"..."
+		if Flag = false
+		TEXT_FALSE
+			"..."
+
+If the description text states that the player has gained a point in Criminal, their stat must be updated.
+If the description text states that the player has a new item in their inventory, the item must be inserted.
+-----------------------------------------------------------------------------------------------------------------------------------
+
+(OTHERWAY_H, A) => (ATTACK_MATTY)
+	Location = same
+	Description = ATTACK_MATTY_P | ATTACK_MATTY_F
+	ROLL FOR HAT
+	ATTACK_MATTY_P - Adv. Honey Badger/ Muscle
+		"The man is crawling around on the ground with his hands outstretched, looking for his glasses. His distraction is your opprotunity. You slowly creep on him and with one swipe of your paw, the man falls still and the side of his wagon is painted red.\n\n"+
+		"You pick up a [insert hat] and place it on your head.\n\n"+
+		"YOU SUCCESSFULLY KILLED A HUMAN, YOU GAIN A POINT FOR CRIMINAL, AND A CRIMINAL FLASH BACK (PRESS \"I\" TO VIEW)\n\n"+
+		"C - Continue";
+
+	ATTACK_MATTY_F
+		"The man is crawling around on the ground with his hands outstretched, looking for his glasses. His distraction is your opprotunity. You slowly creep on him, and trip over the cart, gaining his attention. He turns towards you and says\n\n"+
+		"\"OH! Hello there young whipper snapper, could you help me pick my cart back up?\n\n"+
+		"You begin to try and speak to this old man, but nothing but bear noises come out. So you then try to give an approving tone in your growling.\n\n"+
+		"\"You should probably get that checked out,that sounds like an awful cold your getting.\"\n\n"+
+		"H - Help"
+
+(OTHERWAY_H, H) => (HELP_MATTY)
+	Location = same
+	ROLL FOR HAT
+	Description = HELP_MATTY_TEXT
+	HELP_MATTY_TEXT
+		"You begin helping the old man by righting the cart. You then, in no time, pick up all of the hats that litter the ground and place them in the cart.\n\n"+
+		"\"Thank you young whipper snapper!\" the old man says, with a slight whistle on his s's.\n\n"+
+		"\"The name is Matty! I am taking hats down to the Honey Festival in Lilliput!. For helping me out, would you like a hat?\"\n\n"+
+		"Matty does not wait for you to answer as he pushes a [insert hat] into you hands.\n\n"+
+		"\"There you go! You look so distinguished! Everyone will think you're part of the main act at the park. Well, enjoy the festival!\" Matty says, as he continues towards the town with the his cart, singing to himself.\n\n"+
+		"C - Continue";
+
+(OTHERWAY_C, A) =>(ATTACK_MATTY)
+	
+(OTHERWAY_C, H) => (HELP_MATTY)
+
+(ATTACK_MATTY, C) => (LILLIPUT_GATES)
+	Location = LOCATION_4 
+	Description = LILLIPUT_GATES_TEXT | LILLIPUT_GATES_D
+	
+	if Disguise = false
+	LILLIPUT_GATES_TEXT
+		"The road leads up to a massive stone wall with an archway, manned by two guards wearing black and yellow uniforms and currently carrying rifles. On the wall there is a big sign that shows the symbol of a bear, with a bright red circle and a slash, indicating that bears will not be permitted in the city.\n\n"+
+		"F - Find a Disguise\n"+
+		"A - Approach Guards";
+
+	if Disguise = true
+	LILLIPUT_GATES_D
+		"The road leads up to a massive stone wall with an archway, manned by two guards wearing black and yellow uniforms and currently carrying rifles. On the wall there is a big sign that shows the symbol of a bear, with a bright red circle and a slash, indicating that bears will not be permitted in the city.\n\n"+
+		"A - Approach Guards";
+
+
+(ATTACK_MATTY, H) => (HELP_MATTY)
+
+(HELP_MATTY, C) => (LILLIPUT_GATES)
+	
+(LILLIPUT_GATES, F) => (FIND_DISGUISE)
+	Location = same
+	ROLL FOR CRIMINAL
+	Description = FIND_DISGUISE_TEXT_P | FIND_DISGUISE_TEXT_F
+	FIND_DIGUISE_TEXT_P - Adv. Brains
+		"Looking around, you find a pair of pants in the bushes and an extremely wrinkled shirt near by on the ground. The pants are stiff and caked in dirt, and the shirt is torn in some places with pooling red stains around. You put on the shirt and the pants. The pants are a little too small for you and as you walk, you can hear the fibers straining to remain intact. The shirt, on the other hand, is rather big on you and hangs to the middle of your massive bear thighs.\n\n"+
+		"A - Approach Guards";"
+		Disguise = true;
+
+	FIND_DISGUISE_TEXT_F
+		"The area around seems to be clear of anything that can be used as a disguise. Maybe another area will have something suitable.\n\n"+
+		"S - Search around \n"+
+		"A - Approach the Guards";
+		Disguise = false;
+
+(LILLUPUT_GATES, A) => (APPROACH_GUARDS)
+	Location = same
+	Description = APPROACH_GUARDS_D | APPROACH_GUARDS_TEXT
+	if Disguise = false
+	APPROACH_GUARDS_TEXT
+		"You lumber up to the archway. As you approach, the guards become weary of your presence. One of the guards begins to yell.\n\n"+
+		"\"OYE! SHOO BEAR!\" The guard is waving his hand around as the other guard readys the rifle and aims at you. You walk closer as a small bang echoes through the clearing. You look down and see red feathers connected to a shiny tube sticking out of your chest. You then look straight ahead and see the blue skies, and feel a muffled thud. The world goes black.\n\n"+
+		"You wake up some time later, further away from the town on the dirt road. You get up, shake off the sleep, and head back to the gates of Lilliput\n\n" +
+		"C - Lilliput Gates";
+
+	if Disguise = true
+	APPROACH_GUARDS_D
+		"You lumber to the archway. As you approach, the guards become aware of your presence. You see them take a slight step back as you approach.\n\n"+
+		"\"Good...day.\" One of the guards tell you, hesitantly.\n\n"+
+		"You nod back, tip your hat, and continue through the archway into Lilliput.\n\n"+
+		"YOU SUCCESSFULLY ENTERED LILLIPUT, YOU GAIN A POINT FOR CRIMINAL, AND A CRIMINAL FLASH BACK (PRESS \"I\" TO VIEW)\n\n"+
+		"C - Continue";
+
+(APPROACH_GUARDS, C, Disguise = true) => (LILLIPUT_TOWN_CENTER)
+	Location = LOCATION_5 (Lilliput Town Center)
+	Description = TOWN_CENTER_TEXT_E | TOWN_CENTER_TEXT
+	if Town_center_explored = false
+	TOWN_CENTER_TEXT_E
+		"Lilliput is a town that is centered around a main road that goes straight down towards the center. The road is lined with houses and shops that boast different types of honeys. There are signs that declare the presence of Honey Con, the local honey convention, taking place in the main plaza of town. On the way to the center of town, the scent of honey becomes more noticable. It is clear to see that the plaza is where the convention is, due to the number of people, the pop up stalls for sampling honey and the grand stage and podium that block the view of the docks behind them.\n\n"+
+		"E - Explore\n"+
+		"C - Continue";
+
+	if Town_center_explored = true
+	TOWN_CENTER_TEXT
+		"Lilliput is a town that is centered around a main road that goes straight down towards the center. The road is lined with houses and shops that boast different types of honeys. There are signs that declare the presence of Honey Con, the local honey convention, taking place in the main plaza of town. On the way to the center of town, the scent of honey becomes more noticable. It is clear to see that the plaza is where the convention is, due to the number of people, the pop up stalls for sampling honey and the grand stage and podium that block the view of the docks behind them.\n\n"+
+		"C - Continue";
+
+(LILLIPUT_TOWN_CENTER, E) => (LILLIPUT_TENTS)
+	Locations = same
+	Description = LILLIPUT_TENTS_TEXT
+	LILLIPUT_TENTS_TEXT	
+		"Walking around the central park area, you find that the many tents are sampling various types of honeys. You go around to each of the tents and get a sample from each. Altogether, you have quite a bit of honey. There is also a tent that has voting booths.\n\n" +
+		"YOU NOW HAVE A BUNCH OF HONEY IN YOUR INVENTORY (PRESS \"I\" TO VIEW)\n\n"+
+		"C - Continue";
+		Town_center_explored = true;
+
+(LILLIPUT_TENTS, C) => (LILLIPUT_TOWN_CENTER)
+
+(LILLIPUT_TOWN_CENTER, C) => (LILLIPUT_TOWN_CENTER_1)
+	Location = same
+	Description = TOWN_CENTER_TEXT_1
+	TOWN_CENTER_TEXT_1
+		"As you are taking in the scenery, the crowd begins to roar in applause as a dumpy man in a blue suit parades across the stage. He is followed by a tall and muscular man with angular features. The dumpy man takes the stage and begins to speak.\n\n"+
+		"\"Welcome to the annual Honey Con of 2019!\"\n\n"+
+		"The crowd erupts in applause again.\n\n"+
+		"\"Thank you, thank you. It was all my idea. I created this convention, and in my 73 years alive, I have never had a better idea. The convention began back in 1902 when the bees in this area..\" he drones on.\n\n"+
+		"C - Continue";
+
+(LILLIPUT_TOWN_CENTER_1, C) => (LILLIPUT_TOWN_CENTER_2)
+	Location = same
+	Description = TOWN_CENTER_TEXT_2
+	TOWN_CENTER_TEXT_2
+		"As the dumpy man was talking and through the ooh and ahhs of the audience, the tall man next to the dumpy man was looking around the audience, as if looking for something. His eyes meet yours, and there seems to be a moment of understanding. He smiles at you, in a way that makes you feel uneasy in your disguise, and he continues to survey the audience.\n\n"+
+		"\"...and the winner will get this years grand prize, a massive vat of honey!\" The dumpy man continues and pats a massive black cauldron on stage. When he pulls his hand away, a dribble of honey extends from the cauldron to his hand. He swats at it, and tastes the honey and gives a displeased face, which quickly gives way to a happier face.\n\n"+
+		"\"It's a bit bitter at first, but then its sweet.\" He states. \"Now my assistant, Rafaj,\" the tall man nods,\"will be signing contenstants up for this years Miss Honey Beauty Paegant.\"\n\n"+
+		"C - Continue";
+
+(LILLIPUT_TOWN_CENTER_2, C) => (LILLIPUT_TOWN_CENTER_3)
+	Location = same
+	Description = TOWN_CENTER_TEXT_3
+	TOWN_CENTER_TEXT_3
+		"To the sound of the audience's appluase, the dumpy man leaves the stage. You see a few guards wheel the cauldron of honey off of the stage and towards a building directly behind the park. They take it to a place where the wall splits. The green light blinks as the doors open, and once the honey is wheeled inside, the door closes. The green light now is red.\n\n"+
+		"\"That's a nifty bank feature.\" a voice says from next to you. You turn to look and find two guards speaking to each other.\n\n"+
+		"\"Yeah, this year they went all out on security. We have those security cameras around town, and the vault. Nobody is going to be able to steal the honey.\"\n\n"+
+		"\"Is it Mike watching the cameras? Over at B. Arthur's Books?\"\n\n"+
+		"\"I think so. Hey, you getting hungry? I'm starving!\"\n\n"+
+		"\"Ehh, I could eat.\" The guards then walk off.\n\n"
+		"C - Continue";
+
+(LILLIPUT_TOWN_CENTER_3, C) => (LILLIPUT_TOWN_CENTER_4)
+	Location = same
+	Description = TOWN_CENTER_TEXT_4
+	TOWN_CENTER_TEXT_4
+		"You stand in the center of the park with the knowledge of a massive vat of honey being stored in the vault, a keycard that opens the door to the vault, and the location of the security system. The plan begins to form in your head.\n\n"+
+		"B - Head to B. Arthur's Book Store";
+
+(LILLIPUT_TOWN_CENTER_4, B) => (BOOKS)
+	Location = LOCATION_6 (B. Arthur's Books)
+	Description = BOOKS_TEXT | BOOKS_TEXT_E 
+	if Books_Explored = false
+		"This book shop is made of alabaster limestone with some stone work to make it stand out a little bit. It is slightly recessed, with a big window up front. The window has a painting of a bee with frizzy gray hair and an unamused expression. Next to this picture is the name of the shop. The inside can be seen in between the spaces of the letters.\n\n"+
+		"The interior of the shop is dim with some recessed lights that point downward to cast light on chairs for readers.At the counter, Sits a young man reading a thick book with glossy pages. He has bushy red hair, freckles that populate his cheeks and the bridge of his nose , and square glasses that threaten to fall off of his face.\n\n"+
+		"T - Talk to the young man\n"+
+		"E - Explore\n"+
+		"R - Return to town center";
+
+	if Books_Explored = true 
+		"This book shop is made of alabaster limestone with some stone work to make it stand out a little bit. It is slightly recessed, with a big window up front. The window has a painting of a bee with frizzy gray hair and an unamused expression. Next to this picture is the name of the shop. The inside can be seen in between the spaces of the letters.\n\n"+
+		"The interior of the shop is dim with some recessed lights that point downward to cast light on chairs for readers.At the counter, Sits a young man reading a thick book with glossy pages. He has bushy red hair, freckles that populate his cheeks and the bridge of his nose , and square glasses that threaten to fall off of his face.\n\n"+
+		"T - Talk to the young man\n"+
+		"R - Return to town center";
+
+
+(BOOKS, R) => (LILLIPUT_TOWN_CENTER_4)
+	Location = LOCATION_5
+
+(BOOKS, E) => (BOOKS_E)
+	Location = same
+	Description = BOOK_EXPLORE_TEXT
+	BOOK_EXPLORE_TEXT
+		"You search around the book shop and find an empty table with a book open and a steaming cup of tea. Upon sniffing the tea, you can smell the massive amount of honey in the tea. You take the cup and close the book.\n\n"+
+		"T - Take the tea cup\n"+
+		"R- Return to entrance";
+
+(BOOKS_E, T) => (BOOKS_E_T)
+	Location = same
+	Description = TAKE_T_CUP_P| TAKE_T_CUP_F
+	TAKE_T_CUP_P - (Adv. Thief, Sunbear)
+		"You look around and the coast seems clear. You slink around the table, and swipe the cup. It is warm in your hands, and you can smell the sweet sweet honey that is caked to the bottom of the cup.\n\n"+
+		"YOU NOW HAVE A BUNCH OF HONEY IN YOUR INVENTORY (PRESS \"I\" TO VIEW)\n\n"+
+		"YOU HAVE SUCCESFULLY STOLEN AN ITEM, MOVING A POINT TO CRIMINAL\n\n"+
+		"YOU NOW HAVE A CRIMINAL FLASHBACK IN YOUR INVENTORY (PRESS \"I\" TO VIEW)\n\n"+
+		"R - Return";
+	Books_Explored = true;
+
+	TAKE_T_CUP_F
+		"You look around and the coast seems clear. You sling around the table and swipe the cup. In an instant, you see the cup leave the table, float for a second before it falls to the ground. A loud shattering is heard through the books shop, and a couple of the patrons look in your direction.\n\n"+
+		"YOUR FAILURE FRUSTRATES YOU, MOVING A POINT TO BEAR\n\n"+
+		"R - Return";
+	Books_Explored = true;
+
+(BOOK_E_T , R) => (BOOKS)
+
+(BOOKS, T) => (BOOKS_TALK)
+	Location = same
+	BOOKS_TALK_TEXT
+		"\"Hello sir..and or madam!\" The man behind the counter says to you. He speaks with a severe lisp and showers you with nearly every word that comes out of his mouth. \"My name is Carl. How can I help you?\"\n\n"+
+		"You look down at the book he is currently reading. It has big glossy white pages, with pictures of a very peculiar bug. You point to the image.\n\n"+
+		"\"Oh! I'm reading about the Wynona Water Beatle! It's facinating! Did you know that..." he drones on about the bug.\n\n"+
+		"As he speaks, you notice a guard walk from the front of the store, towards the back. Knock a couple of times on the door, and another guard emerges from the room. It appears they just changed shifts.\n\n"+
+		"\"... and that's why they are my favorite insectoid among the 	Lethocerus!\"\n\n"+
+		"You smile at him.\n\n"+
+		"R - Take a step back\n"+
+		"B - Head towards the back";
+
+(BOOKS_TALK, R) => (BOOKS)
+
+(BOOKS_TALK, B) => (SECURITY_ROOM)
+	Location = same
+	SECURITY_ROOM
+		"You head to the back of the shop and go to the door that you saw the guard go into. You knock a couple of times, the same way you saw the guard knock. In a second, the other guard sticks his head out.\n\n"+
+		"Without hesitation, you push him back into the small space and slash at him. The guard takes a fatal blow to the chest and red paints the walls behind you.\n\n"+
+		"After the battle, you take a look at the room. It is small with a couple of monitors on the wall. They show the festivities in Lilliput, as well as the enterance of a building that looks like a ship. You see the guard who opened the vault with the key card head into that building.\n\n"+
+		"H - Hack\n"+
+		"F - Follow Key Card";
+
+(SECURITY_ROOM, H) => (SECURITY_ROOM_1)
+	Location = same
+	Description = HACK_P | HACK_F
+	HACK_P-(Adv. Hacker)
+		"You sit at the controls of the security system and begin typing commands on the computer. After a few minutes, you look up at the computer screen and see a guard walk across one of the monitors. After a minute, the same guard walks across the monitor.\n\n"+
+		"YOU SUCCESSFULLY HACKED THE SECURITY SYSTEM, MOVE A POINT OVER TO CRIMINAL.\n\n"+
+		"YOU NOW HAVE A NEW CRIMINAL FLASK BACK IN YOUR INVENTORY (PRESS \"I\" TO VIEW)\n\n"+
+		"F - Follow Key Card";
+
+	
+	HACK_F
+		"You sit at the controls of the security system and begin to pound the keyboard. Keys begin to fly off of the keyboard. You look up and see nothing has changed. You enter a crazed state and slash the monitors. Sparks fly over the entire room as deeply scarred monintors decorate the wall.\n\n"+
+		"YOUR FRUSTRATION HAS MADE YOU MORE LIKE A BEAR, MOVING A POINT TO BEAR\n\n"+
+		"F -Follow Key Card";
+		hacked_security = false;
+
+(SECURITY_ROOM, F) => (KRACK_INN)
+	Location = LOCATION_7 (Krack Inn)
+	Description = KRACK_INN_TEXT
+	KRACK_INN_TEXT
+		"The exterior of the inn is shaped and styled as the front of a ship that has been wrecked and was sitting at the bottom of the sea for some time. Tentacles wrap around it, coming from different cracks in the façade. The exterior is made from distressed and blackened wood, with portholes placed along an even interval. The front of the ship façade is broken away, which makes way for the door in an alcove. The second floor has a private balcony attached to the suite at the front and serves as an aesthetic deck.\n\n"+
+		"The interior is dimly lit and also made from wood. The downstairs is a tavern with a bar along the back wall. There is a cut out window for orders to come through and a swinging door to get to the kitchen. The sounds of chopping, pans moving about, and conversation pour through as the chefs prepare for later. There are tables around the tavern with a few guards drinking about. Some are clustered in groups of 3 or 4, others are alone.\n\n"+
+		"You see the Guard with the keycard sitting alone, with his head on the table.\n\n"+
+		"A - Approach Guard";
+
+(SECURITY_ROOM_1, F) => (KRACK_INN)
+
+(KRACK_INN, A) => (KRACK_INN_1)
+	Location = same
+	Description = KRACK_INN_TEXT_1
+	KRACK_INN_TEXT_1
+		"You approach the guard. He seems to be sleeping. You can see the key card dangling out of his pocket.\n\n"+
+		"T - Take the card.";
+
+(KRACK_INN_1, T) => (KRACK_INN_2)
+	Location = same
+	Description KRACK_INN_TEXT_2
+	KRACK_INN_TEXT_2
+		"You reach for the card, delicately grabbing the plastic. With great caution, you begin to pull the card out of the pocket. It comes out, to your great happiness. You turn and begin to walk away, when there comes a great tug on the card, followed by a loud \"OOF\" and the sound of someone hitting the ground.\n\n"+
+		"Upon further inspection, the card is attached to a string, that is then attached to the guard. He is beginning to stir off of the ground. You let go of the card as it zips back to his pocket.\n\n"+
+		"\"Hehehe...I guess I drank a little too *hiccup* much\" The guard says, as he rights himself and sits down at the table.\n\n"+
+		"A - Approach the guard";
+
+(KRACK_INN_2, A) => (KRACK_INN_3)
+	Location = same
+	Description = KRACK_INN_TEXT_3
+	KRACK_INN_TEXT_3
+		"You approach the guard. He regards you through half open eyes, and a swaying posture. He seems to be dancing to unheard music.\n\n"+
+		"\"Hey! wusgoiiin onn??\" He asks you. \"I'm doin fiiine. Ivegot the best jaahb in the woorld\" He laughs and hiccups. \"You see,\" he leans in dangerously close. You can smell the honey whiskey on his breath. \"I haave a kard dat lessme open the vahlt\" He hiccups.\n\n"+
+		"\"Yeaaah, you can thinkof me as a pree improtant duude...you look kinda cuute.\" He laughs and then sighs, and puts his face into his hands, embarassed. \"Wuz I beeeing to for-\" he trails off and begins snoring.\n\n"+
+		"T - Take the card";
+		bool keycard;
+
+(KRACK_INN_3, T, keycard = false) => (KRACK_INN_2)
+	Location = same
+	Description = KRACK_INN_TEXT_2
+					content[DESCRIPTION_INDEX].text += "\n\nYou forgot the string";
+
+(KRACK_INN_3, T, keycard = true) => (KRACK_INN_4)
+	Location = same
+	Description = KRACK_INN_TEXT_4
+	KRACK_INN_TEXT_4
+		"You have acquired the keycard to the vault. Now, it is time to steal your vat of honey.\n\n"+
+		"V - Head to the Vault";
+
+(KRACK_INN_4, V) => (VAULT)
+	Location = LOCAION_8 (The Vault)
+	Description = VAULT_TEXT | VAULT_TEXT_T
+	if hacked_security = true
+	VAULT_TEXT
+		"The trapezoidal building is made mostly of ornate white stone with golden detailing around the edges of the massive pillars that hold up the alcove. The Vault is the official bank of Lilliput and features large shiny windows that allow for natural sunlight to illuminate every corner of the building.\n\n"+
+		"E - Enter the Vault\n";
+
+	if hacked_security = false
+		"The trapezoidal building is made mostly of ornate white stone with golden detailing around the edges of the massive pillars that hold up the alcove. The Vault is the official bank of Lilliput and features large shiny windows that allow for natural sunlight to illuminate every corner of the building.\n\n"+
+		"As you make your way to the entrance of the bank, you hear a soft click. You look over and see a guard staring at you at the end of a rifle. You hear a click\n\n"+
+		"D - Dodge";
+
+(VAULT, D) => (VAULT_GUARD)
+	Location = same
+	Description = VAULT_GUARD_P | VAULT_GUARD_F
+	if vault_guard_pass = true
+	VAULT_GUARD_P
+	"You see the red feathers on the end of the dart coming towards you. You swiftly duck out of the way and gather yourself, as the guard looks stunned that you were able to dodge the dart. He fumbles with the rifle.\n\n"+
+	"You run towards him and swipe your paw, connecting with his face. Your claws sinking into his flesh as it comes undone, like three zippers, across his face. He falls to the floor as red pools under his body. You proceed to enter the Bank.\n\n"+
+	"C - Continue";
+
+	if vault_guard_pass = false
+	VAULT_GUARD_F
+	"You heard the click, and look puzzled as you feel a small twinge of pain on your leg. You look down, and see a plume of red feathers sticking out of the pants you are wearing.\n\n"+
+	"You begin to walk towards the guard, but your legs feel heavy. Everything begins to blur, and you suddenly become dizzy and extremely tired. You land on the ground, and a cloud of dust obstructs your vision. You see the guard beginning to walk over to you.\n\n" + 
+	"C - Continue";
+
+(VAULT_GUARD, C, vault_guard_pass = false) => (VAULT_3)
+
+(VAULT_GUARD, C, vault_guard_pass = true) => (VAULT_1)
+
+(VAULT, E) => (VAULT_1)
+	Location = same
+	Description = DEAD_GUARD
+	DEAD_GUARD
+	"You enter the bank. The interior of the building is just as immaculate as the exterior. The walls a stark white, with dark wooden detailing around the entire room. To the back of the bank, off to the right is the teller area. It is all empty due to this being used as the vault. To the right there is a seating area. And in one of the seats, there is a guard, wearing opaque black sun glasses, and a crimson scarf.\n\n"+
+	"If he sees you, he has made no indication of noticing your presence.\n\n"+
+	"A - Approach Guard";
+
+(VAULT_1, A) => (VAULT_2)
+	Location = same
+	Description = VAULT_TEXT_2
+	VAULT_TEXT_2
+	"You slowly approach the guard, who is simply staring straight ahead. You wave your paws around his face. While waving your paws, you slightly touch his face, and his head falls back, revealing four clawlike gashes through his throat. The crimson scarf is colored that way due to his blood.\n\n"+
+	"You look over to the bank's vault and find that the vault door is ajar.\n\n"+
+	"\"It took you a while to get here.\" You hear a voice say from down the hall. In a moment, you feel a small pinch on your leg, and see a red plume of feathers sticking out of your jeans. You fall to the ground and see Rafaj, the convention coordinator come from around the corner.\n\n"+
+	"Your vision gets hazy and darkness envelopes you.\n\n"+
+	"C - Continue";
+
+(VAULT_2, C) => (VAULT_3)
+	Location = same
+	Description = VAULT_TEXT_3
+	VAULT_TEXT_3
+	"You come to. The bright light from above an affront to your senses. You look around the vault. The entirety of the vault is an atrium, with a pedistal in the middle that holds the cauldron of honey. In front of the honey, you see Rafaj walking towards the honey, only something is off.\n\n"+
+	"It is then that you notice Rafaj is wearing shoes and gloves that appear to be bear paws. His feet are creating impressions in the ground that remarkably resemble bear paws. He is scratching the ground in locations to create the illusion of struggle.\n\n"
+	"You get up and make your way to Rafaj.\n\n"+
+	"C - Continue";
+	bool attack_rafaj = roll criminal (Adv. - Honey Badger, Muscle)
+
+(VAULT_3, C, attack_rafaj = true) => (EASY_ESCAPE)
+	Location = same
+	Description = EASY_ESCAPE_TEXT
+	"Rafaj is so distracted by trying to plant evidence of a bear attack, he does not hear you come up behind him. In one easy swipe of your paw; he flys to the other side of the vault, red blossoming across his back. He falls to the ground, motionless.\n\n"+
+	"You head to the honey, and regard your prize. You know this is the infamous Black Orchid honey. It has a mystical property that transforms anyone who eats some of it into a goth.\n\n"+
+	"You grab the handle of the cart the honey is on, and guide it to the opposite end of the vault, and swipe the key card you stole from the guard. The massive doors open revealing the convention has ended, and the park area is nearly deserted. You push the cart over to the docks and board a ship.\n\n"+
+	"C - Continue";
+
+(VAULT_3, C, attack_rafaj = false) => (HARD_ESCAPE)
+	Location = same
+	Description = HARD_ESCAPE_TEXT
+	"You sneak up behind the man, but your shadow covers Rafaj, alerting him of your presence. He turns around as you swipe your paw. He is hit, and flies to the other end of the vault, but not before he is able to let out a loud yell.\n\n"+
+	"You hear the sound of guards rushing up to the vault. Three guards show up with dart guns at the ready and shoot.\n\n"+
+	"D - Dodge";
+	hard_escape = roll for criminal
+
+(HARD_ESCAPE, D) => (HARD_ESCAPE_1)
+	Location = same
+	Description = HARD_ESCAPE_P | HARD_ESCAPE_F
+	if hard_escape = true
+	HARD_ESCAPE_P
+	"You dodge all three darts with great agility.\n\n"+
+	"\"QUICK! RELOAD BEFORE IT GETS AWAY!\" You hear one of them yell. You turn and grab the handle of the cart the honey is on and push it towards the big doors on the opposite end of the vault.\n\n"+
+	"You hear three darts wizz by your head. You swipe the card into the card reader, and the door begins to open.\n\n"+
+	"You then hear the guards catching up to you. You begin to squeeze the cart through the doors. You hear the smacks of the darts on the metal doors and you dart towards the ships.\n\n"+
+	"C - Continue";
+
+
